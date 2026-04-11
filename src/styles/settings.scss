@@ -1,0 +1,25 @@
+$fontFamily: "Futura",sans-serif; 
+$fontSize: 16; 
+
+$mainColor: #000; 
+
+
+
+// Мінімальна ширина сторінки
+$minWidth: 320;
+// Ширина полотна (макету)
+$maxWidth: 1440;
+// Ширина обмежуючого контейнера (0 = немає обмеження)
+$maxWidthContainer: 1370;
+// Загальний відступ у контейнера
+// (30 = по 15px ліворуч і праворуч, 0 = немає відступу)
+$containerPadding: 40;
+// Ширина спрацьовування першого брейкпоінту
+$containerWidth: $maxWidthContainer + $containerPadding;
+
+$pc: $containerWidth; 
+$tablet: 992.98; 
+$mobile: 768.98; 
+$mobileSmall: 480.98;
+$mobileXS: 375.98; 
+$responsiveType: 1;

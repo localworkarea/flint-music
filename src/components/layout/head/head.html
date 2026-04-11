@@ -1,0 +1,20 @@
+ <head>
+	<if condition="'[[preloader.enable]]' === 'true'">
+		<include src="@components/effects/preloader/preloader.html" locals='{"once":"[[preloader.once]]"}'></include>
+	</if>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<include src="@components/layout/head/fonts-preload.html"></include>
+	<link rel="stylesheet" href="@styles/fonts/fonts.css">
+	<link rel="stylesheet" href="@styles/fonts/iconfont.css">
+	<link rel="stylesheet" href="@styles/style.scss">
+	<link rel="shortcut icon" href="@img/favicon.ico">
+	<if condition="'[[keywords]]' !== ''">
+		<meta name="keywords" content="[[keywords]]">
+	</if>
+	<if condition="'[[description]]' !== ''">
+		<meta name="description" content="[[description]]">
+	</if>
+	<title>[[title]]</title>
+	<style>.page{opacity:0}[data-att-loaded] .page{opacity:1;transition:.2s}.wrapper{position:relative;z-index:1}.wrapper-bg{position:absolute;z-index:-1;bottom:0;left:50%;transform:translate(-50%,0);width:100%;height:auto;aspect-ratio:390/844}@media (min-width:30.06125em){.wrapper-bg{min-width:120rem;aspect-ratio:1920/1223}}.--fp-init body{overflow:hidden;touch-action:none;overscroll-behavior:none}.--fp-init [data-att-fullpage]{z-index:1;touch-action:none;position:relative;overflow:hidden}.--fp-init [data-fp-section]{position:absolute;top:0;left:0;right:0;bottom:0;width:100%;height:100%;overflow:auto}</style>
+</head>

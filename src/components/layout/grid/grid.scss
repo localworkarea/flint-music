@@ -1,0 +1,207 @@
+@use "sass:map";
+
+// ------------------ Налаштування ------------------
+
+$grid-columns: 12;
+
+$gap-sizes: (
+	desktop: 28,
+	tablet: 24,
+	mobile: 20,
+	small: 16
+);
+
+$breakpoints: (
+	desktop: toRem($pc),
+	tablet: toRem($tablet),
+	mobile: toRem($mobile),
+	small: toRem($mobileSmall)
+);
+
+// ------------------ Міксини -------------------------
+
+@mixin media($breakpoint) {
+	@media (max-width: map.get($breakpoints, $breakpoint)) {
+		@content;
+	}
+}
+
+// ------------------ GRID-Контейнер ------------------
+
+[data-att-grid] {
+	display: grid;
+	grid-template-columns: repeat($grid-columns, 1fr);
+
+	@if ($responsiveType==1) {
+		@include adaptiveValue("gap", map.get($gap-sizes, desktop), map.get($gap-sizes, small));
+	} @else {
+		gap: toRem(map.get($gap-sizes, desktop));
+		@each $bp, $gap in $gap-sizes {
+			@if ($bp != "desktop") {
+				@include media($bp) {
+					gap: toRem($gap);
+				}
+			}
+		}
+	}
+}
+
+// Вирівнювання
+[data-att-grid="y-start"] {
+	align-items: start;
+}
+[data-att-grid="y-center"] {
+	align-items: center;
+}
+[data-att-grid="y-end"] {
+	align-items: end;
+}
+[data-att-grid="x-start"] {
+	justify-items: start;
+}
+[data-att-grid="x-center"] {
+	justify-items: center;
+}
+[data-att-grid="x-end"] {
+	justify-items: end;
+}
+[data-att-grid="x-stretch"] {
+	justify-items: stretch;
+}
+[data-att-grid="start"] {
+	place-items: start;
+}
+[data-att-grid="center"] {
+	place-items: center;
+}
+[data-att-grid="end"] {
+	place-items: end;
+}
+[data-att-grid="stretch"] {
+	place-items: stretch;
+}
+
+// Auto-flow керування
+[data-att-grid-flow="row"] {
+	grid-auto-flow: row;
+}
+[data-att-grid-flow="column"] {
+	grid-auto-flow: column;
+}
+[data-att-grid-flow="dense"] {
+	grid-auto-flow: dense;
+}
+[data-att-grid-flow="row-dense"] {
+	grid-auto-flow: row dense;
+}
+[data-att-grid-flow="column-dense"] {
+	grid-auto-flow: column dense;
+}
+
+// Однакові рядки та колонки
+[data-att-grid-samerows] {
+	grid-auto-rows: 1fr;
+}
+[data-att-grid-samecols] {
+	grid-auto-columns: 1fr;
+}
+
+// ------------------ GRID-Елемент ------------------
+
+@for $i from 1 through $grid-columns {
+	[data-att-grid-col="#{$i}"] {
+		grid-column: span $i;
+	}
+	[data-att-grid-col-start="#{$i}"] {
+		grid-column-start: $i;
+	}
+	[data-att-grid-col-end="#{$i}"] {
+		grid-column-end: $i + 1;
+	}
+	[data-att-grid-row="#{$i}"] {
+		grid-row: span $i;
+	}
+	[data-att-grid-row-start="#{$i}"] {
+		grid-row-start: $i;
+	}
+	[data-att-grid-row-end="#{$i}"] {
+		grid-row-end: $i + 1;
+	}
+}
+// По брейкпоінтах
+@each $bp, $val in $breakpoints {
+	@if ($bp != "desktop") {
+		@include media($bp) {
+			@for $i from 1 through $grid-columns {
+				[data-att-grid-col-#{$bp}="#{$i}"] {
+					grid-column: span $i;
+				}
+				[data-att-grid-col-start-#{$bp}="#{$i}"] {
+					grid-column-start: $i;
+				}
+				[data-att-grid-col-end-#{$bp}="#{$i}"] {
+					grid-column-end: $i + 1;
+				}
+				[data-att-grid-row-#{$bp}="#{$i}"] {
+					grid-row: span $i;
+				}
+				[data-att-grid-row-start-#{$bp}="#{$i}"] {
+					grid-row-start: $i;
+				}
+				[data-att-grid-row-end-#{$bp}="#{$i}"] {
+					grid-row-end: $i + 1;
+				}
+			}
+			[data-att-grid-row-full-#{$bp}] {
+				grid-row: 1 / -1;
+			}
+			[data-att-grid-col-full-#{$bp}] {
+				grid-column: 1 / -1;
+			}
+		}
+	}
+}
+
+// На всю сітку
+[data-att-grid-row-full] {
+	grid-row: 1 / -1;
+}
+[data-att-grid-col-full] {
+	grid-column: 1 / -1;
+}
+
+// Вирівнювання
+[data-att-grid-self="y-start"] {
+	align-self: start;
+}
+[data-att-grid-self="y-center"] {
+	align-self: center;
+}
+[data-att-grid-self="y-end"] {
+	align-self: end;
+}
+[data-att-grid-self="x-start"] {
+	justify-self: start;
+}
+[data-att-grid-self="x-center"] {
+	justify-self: center;
+}
+[data-att-grid-self="x-end"] {
+	justify-self: end;
+}
+[data-att-grid-self="x-stretch"] {
+	justify-self: stretch;
+}
+
+[data-att-grid-self="stretch"] {
+	place-self: stretch;
+}
+[data-att-grid-self="end"] {
+	place-self: end;
+}
+[data-att-grid-self="start"] {
+	place-self: start;
+}
+[data-att-grid-self="center"] {
+	place-self: center;
+}
