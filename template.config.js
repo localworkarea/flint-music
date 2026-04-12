@@ -65,7 +65,7 @@ export default {
 		optimize: {
 			enable: true,
 			edithtml: true,
-			sizes: [500, 1200],
+			sizes: [400, 1200],
 			dpi: [],
 			attrignore: 'data-img-ignore',
 			modernformat: {

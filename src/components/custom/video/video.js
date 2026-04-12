@@ -1,6 +1,4 @@
 
-import { addTouchAttr, addLoadedAttr, isMobile, FLS } from "@js/common/functions.js"
-
 import "./video.scss"
 
   const videoYoutubeButtons = document.querySelectorAll('.video-youtube__button');
