@@ -65,9 +65,25 @@
       transition: opacity .3s ease, transform .75s cubic-bezier(.18, 1.08, .33, 1.07);
       transition-delay: 3s;
     }
+    
+    .--section-0.--scroll-up & {
+      transition-delay: 0s;
+    }
+    .--section-1 & {
+      transform: translate(-50%, -50%) scale(1.15) rotate(-8deg);
+      transition-delay: 0s;
+    }
+    .--section-2 & {
+      transform: translate(-50%, -50%) scale(1.05) rotate(0deg);
+      transition-delay: 0s;
+    }
 
 
-    @media (min-width:toEm(1200.98)) {
+    @media (min-width:toEm(1900.98)) {
+      width: 2100px;
+      max-width: 2100px;
+    }
+    @media (max-width: toEm(1900.98)) and (min-width:toEm(1200.98)) {
       width: 1900px;
       max-width: 1900px;
     }
@@ -949,6 +965,7 @@
 
   // .section--2__wrp
   &__wrp {
+    position: relative;
     display: grid;
     place-items: center;
 
@@ -1013,6 +1030,45 @@
 
 
   }
+
+	// .section--2__plt
+	&__plt {
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-60%);
+    width: 610px;
+    aspect-ratio: 1;
+    @media (min-width:toEm(1100.98)){
+      width: 766px;
+      transform: translate(-50%,-50%);
+    }
+    @media (max-width: toEm(1100.98)) and (min-width:toEm($mobileSmall)) {
+      width: 600px;
+    }
+    img {
+      transition: transform .85s ease;
+      .--prev-section & {
+        transform: scale(0.7) rotate(-720deg);
+        transition-delay: 0.45s;
+        @media (min-width:toEm($mobileSmall)){
+          transform: scale(0.5) rotate(-720deg);
+        }
+      }
+      .--active-section & {
+        transform: scale(1) rotate(0deg);
+        transition-delay: 0.3s;
+      }
+      .--next-section & {
+        transform: scale(0.7) rotate(720deg);
+        transition-delay: 0.45s;
+        @media (min-width:toEm($mobileSmall)){
+          transform: scale(0.5) rotate(720deg);
+        }
+      }
+    }
+	}
 }
 
 
@@ -1039,6 +1095,10 @@
       margin-bottom: 40px;
       font-size: 50px;
     }
+    @media (max-width: toEm(800.98)) and (min-width: toEm(500.98)) and (max-height: toEm(500.98)) {
+      font-size: 24px;
+      margin-bottom: 20px;
+     }
   }
 }
 
@@ -1055,6 +1115,9 @@
     @media (max-width:toEm($mobileSmall)){
        max-width: 58vw; 
     }
+    @media (max-width: toEm(800.98)) and (min-width: toEm(500.98)) and (max-height: toEm(500.98)) {
+        max-width: 25vw; 
+     }
     &.swiper {
       overflow: visible;
     }
@@ -1081,6 +1144,9 @@
       top: 50%;
       width: 60px;
     }
+    @media (max-width: toEm(800.98)) and (min-width: toEm(500.98)) and (max-height: toEm(500.98)) {
+      width: 50px;
+     }
 
     &.swiper-button-prev {
       left: -10px;
@@ -1105,6 +1171,18 @@
   // .slide-flint__img
   &__img {
     position: relative;
+
+    cursor: pointer;
+    img {
+      transition: transform .45s ease;
+    }
+    @media (any-hover: hover){
+      &:hover{
+        img {
+          transform: scale(1.05);
+        }
+      }
+    }
 
     &::before {
       content: '';
@@ -1144,15 +1222,19 @@
     transition: opacity .3s ease, transform .3s ease;
     transform: translate(0, 50%);
     opacity: 0;
-
+    
     .swiper-slide-active & {
       transform: translate(0, 0%);
       opacity: 1;
       transition-delay: .45s;
     }
-
+    
     @media (min-width:toEm($mobileSmall)) {
       font-size: 34px;
     }
+    @media (max-width: toEm(800.98)) and (min-width: toEm(500.98)) and (max-height: toEm(500.98)) {
+      margin-top: 10px;
+      font-size: 20px;
+     }
   }
 }
