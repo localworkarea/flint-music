@@ -376,6 +376,18 @@ class FullPage {
 		if (this.options.bullets && this.bulletsWrapper) {
 			this.bulletsWrapper.addEventListener('click', this.events.click);
 		}
+		
+		const nextArrowBtns = document.querySelectorAll('[data-fp-switch-btn]');
+		if (nextArrowBtns.length > 0) {
+			nextArrowBtns.forEach(nextArrowBtn => {
+				 nextArrowBtn.addEventListener('click', () => {
+						 const nextSectionId = this.activeSectionId + 1;
+						 if (nextSectionId < this.sections.length) {
+								 this.switchingSection(nextSectionId);
+						 }
+				 });
+			});
+		}
 	}
 	removeEvents() {
 		this.wrapper.removeEventListener('wheel', this.events.wheel);

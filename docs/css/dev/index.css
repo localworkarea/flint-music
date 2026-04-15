@@ -206,6 +206,64 @@ body {
   transition-delay: 0s;
 }
 
+.scroll-btn__wr {
+  position: absolute;
+  z-index: 10;
+  bottom: 0.625rem;
+  left: 50%;
+  transform: translate(-50%, 200%);
+  opacity: 0;
+  visibility: hidden;
+}
+.scroll-btn__wr.--switch {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+[data-att-loaded] .scroll-btn__wr {
+  transition: transform 0.75s ease, bottom 0.75s ease, opacity 0.3s ease, visibility 0.3s ease;
+}
+.--section-2 .scroll-btn__wr {
+  transform: translate(-50%, 200%);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.scroll-btn {
+  display: grid;
+  place-items: center;
+  width: 3.75rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0rem 1.25rem 0.3125rem rgba(0, 0, 0, 0.25);
+  background: radial-gradient(50% 50% at 50% 50%, #eb4016 0%, #9d2406 100%);
+}
+.scroll-btn img {
+  height: auto;
+}
+.scroll-btn__block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4375rem;
+}
+.scroll-btn__img-top {
+  width: 26%;
+}
+.scroll-btn__img-arr {
+  width: 20%;
+  animation: scrollArrowMove 1.5s ease-in-out infinite;
+}
+
+@keyframes scrollArrowMove {
+  0%, 100% {
+    transform: translateY(-0.1875rem);
+  }
+  50% {
+    transform: translateY(0.25rem);
+  }
+}
 .flint-player {
   top: 50%;
   right: 62%;
@@ -228,9 +286,13 @@ body {
   transform: translate(0%, 0%) scale(1);
   transition: opacity 0.2s ease, transform 0.8s cubic-bezier(0.18, 1.08, 0.33, 1.07);
 }
+.flint-player__frame.frame--1.is-active img, .flint-player__frame.frame--2.is-active img, .flint-player__frame.frame--3.is-active img {
+  transform: scale(1.2);
+}
 .flint-player__frame img {
   position: relative;
   z-index: 0;
+  transition: transform 0.45s ease;
 }
 .flint-player__frame.frame--1 {
   transform: translate(100%, 100%) scale(0);
@@ -263,13 +325,13 @@ body {
   box-shadow: 3.75rem 0.625rem 3.75rem 0 rgba(44, 27, 27, 0.5);
 }
 .flint-player__frame.is-active.frame--1::before {
-  box-shadow: 3.125rem 0.625rem 3.75rem 0 rgba(44, 27, 27, 0.5), 0 0 5rem 0 rgb(255, 77, 16);
+  box-shadow: 3.125rem 0.625rem 3.75rem 0 rgba(44, 27, 27, 0.5), 0 0 6.25rem 2.8125rem rgb(255, 77, 16);
 }
 .flint-player__frame.is-active.frame--2::before {
-  box-shadow: 3.125rem 0 3.75rem 0 rgba(44, 27, 27, 0.5), 0 0 5rem 0 rgb(113, 194, 0);
+  box-shadow: 3.125rem 0 3.75rem 0 rgba(44, 27, 27, 0.5), 0 0 6.25rem 2.8125rem rgb(113, 194, 0);
 }
 .flint-player__frame.is-active.frame--3::before {
-  box-shadow: 3.125rem -0.625rem 3.75rem 0 rgba(44, 27, 27, 0.5), 0 0 5rem 0 rgb(61, 197, 164);
+  box-shadow: 3.125rem -0.625rem 3.75rem 0 rgba(44, 27, 27, 0.5), 0 0 6.25rem 2.8125rem rgb(61, 197, 164);
 }
 .play-toggle {
   position: relative;
@@ -494,9 +556,12 @@ body {
   position: absolute;
   left: 0;
   width: 100%;
-  height: 2.5rem;
+  height: 1.25rem;
   pointer-events: none;
   z-index: 2;
+}
+.music-card__lyrics-wrap.--scroll::after {
+  display: none;
 }
 .music-card__lyrics-wrap::before {
   top: 0;
@@ -912,6 +977,14 @@ body {
     transform: translate(0%, -40%);
     max-width: 23.75rem;
   }
+}@media (max-width: 81.31125em) and (min-width: 51.31125em) {
+  .flint-player {
+    max-height: 37.5rem;
+    right: 61%;
+  }
+  .flint-player__frame {
+    max-width: 11.25rem;
+  }
 }@media (max-width: 75.06125em) and (min-width: 51.31125em) {
   .sections::before {
     width: 110vw;
@@ -1030,6 +1103,9 @@ body {
     font-size: 1.25rem;
   }
 }@media (max-width: 30.06125em) {
+  .scroll-btn__wr {
+    bottom: 1.875rem;
+  }
   .flint-player {
     top: calc(100% - 9.375rem);
     padding-inline: 0.625rem;
@@ -1054,9 +1130,6 @@ body {
   }
   .music-card__lyrics-wrap {
     margin-bottom: 1.25rem;
-  }
-  .music-card__lyrics-wrap::before, .music-card__lyrics-wrap::after {
-    height: 1.25rem;
   }
   .music-card__lyrics-wrap::after {
     display: none;
@@ -1148,33 +1221,40 @@ body {
     aspect-ratio: 1659/678;
     background-image: url("../assets/img/grinkas-pc.webp");
   }
+  .scroll-btn {
+    width: 5rem;
+  }
+  .scroll-btn__img-top {
+    width: 30%;
+  }
   .flint-player {
     width: max-content;
     height: 100%;
-    max-height: 37.5rem;
     flex-direction: column;
     top: 50%;
-    right: 62%;
     transform: translate(-100%, -50%);
   }
   .flint-player__frame {
-    max-width: 11.25rem;
     min-height: 0;
   }
   .flint-player__frame.frame--1 {
-    left: 20%;
+    left: 35%;
   }
   .flint-player__frame.frame--2 {
     transform: translate(100%, 0%) scale(0);
   }
   .flint-player__frame.frame--3 {
-    left: 20%;
+    left: 35%;
   }
   .plativka {
     transform: translate(-50%, -170%) rotate(-720deg);
   }
   [data-att-loaded] .plativka {
     transform: translate(-50%, -50%) rotate(0deg);
+  }
+}@media (min-height: 53.18625em) {
+  .scroll-btn__wr {
+    bottom: 1.25rem;
   }
 }@media (min-width: 68.81125em) {
   .section--2__wrp .video-youtube .social {
@@ -1234,6 +1314,14 @@ body {
     padding: 0.75rem;
     max-width: 15.9375rem;
     font-size: 1.5rem;
+  }
+}@media (min-width: 81.31125em) {
+  .flint-player {
+    max-height: 50rem;
+    right: 61%;
+  }
+  .flint-player__frame {
+    max-width: 15.625rem;
   }
 }@media (width > 88.125em) {
   .video-youtube__button::before {

@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	const flintPlayer = document.querySelector(".music-card");
 	const framePack = document.querySelector(".flint-player");
 	const frames = document.querySelectorAll(".flint-player__frame");
+	const switchBtn = document.querySelector(".scroll-btn__wr");
 	const lyricsData = [
 		{
 			start: 0,
@@ -181,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	let firstPlayDelayUsed = false;
 	let firstPlayTimeoutId = null;
 	renderLyrics();
+	updateLyricsBottomSpacing();
 	bindEvents();
 	updateButtonsState(false);
 	updateTimeUI(0, 0);
@@ -236,6 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			hasStartedPlayback = true;
 			flintPlayer?.classList.add("--play");
 			flintPlayer?.classList.remove("--pause");
+			switchBtn?.classList.remove("--switch");
 			updateButtonsState(true);
 			startRAF();
 			startDiscRotation();
@@ -257,6 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			updateTimeUI(audio.currentTime, audio.duration);
 			resetLyricsState();
 			pauseDiscRotation();
+			switchBtn?.classList.add("--switch");
 		});
 		progress.addEventListener("input", () => {
 			isDraggingProgress = true;
@@ -275,6 +279,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			updateFramesState();
 		});
 		window.addEventListener("resize", () => {
+			updateLyricsBottomSpacing();
 			updateLyricsScroll(activeIndex);
 		});
 	}
@@ -359,13 +364,23 @@ document.addEventListener("DOMContentLoaded", () => {
 		const wrapHeight = lyricsWrap.clientHeight;
 		const activeTop = activeLine.offsetTop;
 		const activeHeight = activeLine.offsetHeight;
-		let targetY;
-		if (nextLine) targetY = activeTop - (wrapHeight - nextLine.offsetHeight - activeHeight);
-		else targetY = activeTop - (wrapHeight - activeHeight);
+		const styles = window.getComputedStyle(lyricsContainer);
+		const gap = parseFloat(styles.rowGap || styles.gap || 0) || 0;
+		let reserveHeight;
+		if (nextLine) reserveHeight = nextLine.offsetHeight + gap;
+		else reserveHeight = activeHeight + gap;
+		let targetY = activeTop - (wrapHeight - reserveHeight - activeHeight);
 		const maxScroll = Math.max(lyricsContainer.scrollHeight - wrapHeight, 0);
 		targetY = Math.max(0, Math.min(targetY, maxScroll));
 		lyricsContainer.style.transform = `translateY(-${targetY}px)`;
 		lyricsWrap.classList.toggle("--scroll", targetY > 0);
+	}
+	function updateLyricsBottomSpacing() {
+		if (!lyricEls.length || !lyricsContainer) return;
+		const styles = window.getComputedStyle(lyricsContainer);
+		const gap = parseFloat(styles.rowGap || styles.gap || 0) || 0;
+		const lineHeight = lyricEls[0].offsetHeight;
+		lyricsContainer.style.paddingBottom = `${lineHeight + gap}px`;
 	}
 	function formatTime(seconds) {
 		const totalSeconds = Math.max(0, Math.floor(seconds || 0));
@@ -3892,6 +3907,13 @@ var FullPage = class {
 		this.wrapper.addEventListener("wheel", this.events.wheel);
 		this.wrapper.addEventListener("touchstart", this.events.touchdown);
 		if (this.options.bullets && this.bulletsWrapper) this.bulletsWrapper.addEventListener("click", this.events.click);
+		const nextArrowBtns = document.querySelectorAll("[data-fp-switch-btn]");
+		if (nextArrowBtns.length > 0) nextArrowBtns.forEach((nextArrowBtn) => {
+			nextArrowBtn.addEventListener("click", () => {
+				const nextSectionId = this.activeSectionId + 1;
+				if (nextSectionId < this.sections.length) this.switchingSection(nextSectionId);
+			});
+		});
 	}
 	removeEvents() {
 		this.wrapper.removeEventListener("wheel", this.events.wheel);

@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const flintPlayer = document.querySelector(".music-card");
   const framePack = document.querySelector(".flint-player");
   const frames = document.querySelectorAll(".flint-player__frame");
+	const switchBtn = document.querySelector(".scroll-btn__wr");
   
 	// Данные строк
 	const lyricsData = [
@@ -67,8 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	let discRafId = null;
 	let firstPlayDelayUsed = false;
 	let firstPlayTimeoutId = null;
+	// let hasCompletedFirstFullPlay = false;
 
 	renderLyrics();
+	updateLyricsBottomSpacing();
 	bindEvents();
 	updateButtonsState(false);
 	updateTimeUI(0, 0);
@@ -142,8 +145,8 @@ document.addEventListener("DOMContentLoaded", () => {
 		audio.addEventListener("play", () => {
     	hasStartedPlayback = true;
     	flintPlayer?.classList.add("--play");
-    	
       flintPlayer?.classList.remove("--pause");
+			switchBtn?.classList.remove("--switch");
     	updateButtonsState(true);
     	startRAF();
 			startDiscRotation();
@@ -169,6 +172,12 @@ document.addEventListener("DOMContentLoaded", () => {
     	updateTimeUI(audio.currentTime, audio.duration);
     	resetLyricsState();
 			pauseDiscRotation();
+			switchBtn?.classList.add("--switch");
+
+			// if (!hasCompletedFirstFullPlay) {
+			// 	hasCompletedFirstFullPlay = true;
+			// 	switchBtn?.classList.add("--switch");
+			// }
     });
 
 		progress.addEventListener("input", () => {
@@ -191,6 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
 		window.addEventListener("resize", () => {
+			updateLyricsBottomSpacing();
 			updateLyricsScroll(activeIndex);
 		});
 	}
@@ -301,36 +311,83 @@ document.addEventListener("DOMContentLoaded", () => {
 	updateLyricsScroll(activeIndex);
 }
 
+	// function updateLyricsScroll(index) {
+  // 	if (index < 0 || !lyricEls[index] || !lyricsWrap) {
+  // 		lyricsWrap?.classList.remove("--scroll");
+  // 		lyricsContainer.style.transform = "translateY(0px)";
+  // 		return;
+  // 	}
+
+  // 	const activeLine = lyricEls[index];
+  // 	const nextLine = lyricEls[index + 1];
+
+  // 	const wrapHeight = lyricsWrap.clientHeight;
+  // 	const activeTop = activeLine.offsetTop;
+  // 	const activeHeight = activeLine.offsetHeight;
+
+  // 	let targetY;
+
+  // 	if (nextLine) {
+  // 		const nextHeight = nextLine.offsetHeight;
+  // 		const targetBottomZone = wrapHeight - nextHeight;
+  // 		targetY = activeTop - (targetBottomZone - activeHeight);
+  // 	} else {
+  // 		targetY = activeTop - (wrapHeight - activeHeight);
+  // 	}
+
+  // 	const maxScroll = Math.max(lyricsContainer.scrollHeight - wrapHeight, 0);
+  // 	targetY = Math.max(0, Math.min(targetY, maxScroll));
+
+  // 	lyricsContainer.style.transform = `translateY(-${targetY}px)`;
+  // 	lyricsWrap.classList.toggle("--scroll", targetY > 0);
+  // }
+
 	function updateLyricsScroll(index) {
-  	if (index < 0 || !lyricEls[index] || !lyricsWrap) {
-  		lyricsWrap?.classList.remove("--scroll");
-  		lyricsContainer.style.transform = "translateY(0px)";
-  		return;
-  	}
+		if (index < 0 || !lyricEls[index] || !lyricsWrap) {
+			lyricsWrap?.classList.remove("--scroll");
+			lyricsContainer.style.transform = "translateY(0px)";
+			return;
+		}
 
-  	const activeLine = lyricEls[index];
-  	const nextLine = lyricEls[index + 1];
+		const activeLine = lyricEls[index];
+		const nextLine = lyricEls[index + 1];
 
-  	const wrapHeight = lyricsWrap.clientHeight;
-  	const activeTop = activeLine.offsetTop;
-  	const activeHeight = activeLine.offsetHeight;
+		const wrapHeight = lyricsWrap.clientHeight;
+		const activeTop = activeLine.offsetTop;
+		const activeHeight = activeLine.offsetHeight;
 
-  	let targetY;
+		const styles = window.getComputedStyle(lyricsContainer);
+		const gap = parseFloat(styles.rowGap || styles.gap || 0) || 0;
 
-  	if (nextLine) {
-  		const nextHeight = nextLine.offsetHeight;
-  		const targetBottomZone = wrapHeight - nextHeight;
-  		targetY = activeTop - (targetBottomZone - activeHeight);
-  	} else {
-  		targetY = activeTop - (wrapHeight - activeHeight);
-  	}
+		let reserveHeight;
 
-  	const maxScroll = Math.max(lyricsContainer.scrollHeight - wrapHeight, 0);
-  	targetY = Math.max(0, Math.min(targetY, maxScroll));
+		if (nextLine) {
+			// если есть следующая строка — оставляем под неё место снизу
+			reserveHeight = nextLine.offsetHeight + gap;
+		} else {
+			// если это последняя строка — всё равно оставляем одно "место строки" снизу
+			reserveHeight = activeHeight + gap;
+		}
 
-  	lyricsContainer.style.transform = `translateY(-${targetY}px)`;
-  	lyricsWrap.classList.toggle("--scroll", targetY > 0);
-  }
+		const targetBottomZone = wrapHeight - reserveHeight;
+		let targetY = activeTop - (targetBottomZone - activeHeight);
+
+		const maxScroll = Math.max(lyricsContainer.scrollHeight - wrapHeight, 0);
+		targetY = Math.max(0, Math.min(targetY, maxScroll));
+
+		lyricsContainer.style.transform = `translateY(-${targetY}px)`;
+		lyricsWrap.classList.toggle("--scroll", targetY > 0);
+	}
+
+	function updateLyricsBottomSpacing() {
+		if (!lyricEls.length || !lyricsContainer) return;
+
+		const styles = window.getComputedStyle(lyricsContainer);
+		const gap = parseFloat(styles.rowGap || styles.gap || 0) || 0;
+		const lineHeight = lyricEls[0].offsetHeight;
+
+		lyricsContainer.style.paddingBottom = `${lineHeight + gap}px`;
+	}
 
 	function formatTime(seconds) {
 		const totalSeconds = Math.max(0, Math.floor(seconds || 0));
