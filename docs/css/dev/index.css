@@ -264,6 +264,14 @@ body {
     transform: translateY(0.25rem);
   }
 }
+.grinka {
+  display: none;
+}
+.grinka img {
+  width: 100%;
+  height: auto;
+}
+
 .flint-player {
   top: 50%;
   right: 62%;
@@ -1270,6 +1278,34 @@ body {
     transform: translate(-50%, -50%);
   }
 }@media (min-width: 75.06125em) {
+  .grinka {
+    display: block;
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 100%;
+    opacity: 0;
+  }
+  [data-att-loaded] .grinka {
+    opacity: 1;
+    transition: opacity 0.3s ease, transform 0.75s cubic-bezier(0.18, 1.08, 0.33, 1.07);
+  }
+  .grinka.grinka-1 {
+    width: 37%;
+    transform: translate(-100%, -100%) rotate(310deg) scale(0);
+  }
+  [data-att-loaded] .grinka.grinka-1 {
+    transform: translate(-38%, -100%) rotate(310deg) scale(1);
+    transition-delay: 2.3s;
+  }
+  .grinka.grinka-2 {
+    width: 25%;
+    transform: translate(-100%, 22%) rotate(100deg) scale(0);
+  }
+  [data-att-loaded] .grinka.grinka-2 {
+    transform: translate(11%, 22%) rotate(180deg) scale(1);
+    transition-delay: 2.5s;
+  }
   .plativka .flint-player__center-control .play-toggle {
     width: 7rem;
   }
